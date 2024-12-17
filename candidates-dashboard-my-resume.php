@@ -191,7 +191,7 @@ include('profile.php');
                     </li>
 
                     <li class="nav-item">
-                        <a href="dashboard-change-password.html" class="nav-link">
+                        <a href="dashboard-change-password.php" class="nav-link">
                             <span class="icon"><i class="ri-lock-line"></i></span>
                             <span class="menu-title">Change Password</span>
                         </a>
@@ -551,9 +551,9 @@ include('profile.php');
                                                     </li>
                                 
                                                     <li class="nav-item">
-                                                        <a href="dashboard-submit-resume.html" class="nav-link">
+                                                        <a href="candidates-dashboard-my-resume.php" class="nav-link">
                                                             <span class="icon"><i class="ri-close-line"></i></span>
-                                                            <span class="menu-title">Submit Resumes</span>
+                                                            <span class="menu-title">View Resumes</span>
                                                         </a>
                                                     </li>
                                 
@@ -707,51 +707,47 @@ include('profile.php');
         </div>
        
 
-        <!-- Jquery Min JS -->
         <script src="assets/js/jquery.min.js"></script>
-        <!-- Bootstrap Bundle Min JS -->
+      
         <script src="assets/js/bootstrap.bundle.min.js"></script>
-        <!--=== Magnific Popup Min JS ===-->
+    
         <script src="assets/js/jquery.magnific-popup.min.js"></script>
-        <!--=== Odometer Min JS ===-->
+        
         <script src="assets/js/odometer.min.js"></script>
-        <!-- Appear Min JS -->
+       
         <script src="assets/js/jquery.appear.min.js"></script>
-        <!--=== meanMenu Min JS ===-->
+      
         <script src="assets/js/meanmenu.min.js"></script>
-        <!--=== metisMenu Min JS ===-->
+    
         <script src="assets/js/metismenu.min.js"></script>
-        <!--=== simpleBar Min JS ===-->
+     
         <script src="assets/js/simplebar.min.js"></script>
-        <!-- Dropzone JS -->
+     
         <script src="assets/js/dropzone.min.js"></script>
-        <!-- Sticky Sidebar JS -->
+     
         <script src="assets/js/sticky-sidebar.min.js"></script>
-        <!-- TweenMax JS -->
+     
         <script src="assets/js/tweenMax.min.js"></script>
-        <!-- Owl Carousel JS -->
+       
         <script src="assets/js/owl.carousel.min.js"></script>
-        <!-- Wow Min JS -->
+       
         <script src="assets/js/wow.min.js"></script>
-        <!--=== ajaxChimp Min JS ===-->
+       
         <script src="assets/js/jquery.ajaxchimp.min.js"></script>
-        <!-- Form Validator Min JS -->
+      
         <script src="assets/js/form-validator.min.js"></script>
-        <!-- Contact Form JS -->
+
         <script src="assets/js/contact-form-script.js"></script>
-        <!--=== Custom JS ===-->
+   
         <script src="assets/js/custom.js"></script>
         <script>
-        // JavaScript to enhance the experience if needed (e.g., auto-resize iframe on load)
+        
         window.addEventListener('load', function () {
             var iframe = document.querySelector('iframe');
             if (iframe) {
-                iframe.style.height = (window.innerHeight - 100) + 'px'; // Adjust iframe height dynamically
+                iframe.style.height = (window.innerHeight - 100) + 'px'; 
             }
         });
-    </script>
-        
-    </body>
-
-<!-- Mirrored from templates.hibootstrap.com/zoben/default/candidates-dashboard-my-resume.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 06 Nov 2024 10:02:58 GMT -->
+    </script>    
+</body>
 </html>

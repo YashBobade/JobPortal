@@ -1,11 +1,19 @@
 <?php
-include('connection.php');
+
 include('profile.php');
+
+// Check if there's a message in the session
+$message = isset($_SESSION['message']) ? $_SESSION['message'] : '';
+$message_type = isset($_SESSION['message_type']) ? $_SESSION['message_type'] : ''; // "success" or "error"
+
+// Clear the message after displaying it
+unset($_SESSION['message'], $_SESSION['message_type']);
 ?>
+
 <!DOCTYPE html>
 <html lang="zxx">
     
-<!-- Mirrored from templates.hibootstrap.com/zoben/default/candidates-dashboard.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 06 Nov 2024 10:02:41 GMT -->
+<!-- Mirrored from templates.hibootstrap.com/zoben/default/dashboard-change-password.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 06 Nov 2024 10:02:58 GMT -->
 <head>
         <!-- Required Meta Tags -->
         <meta charset="UTF-8">
@@ -43,6 +51,24 @@ include('profile.php');
         <!--=== Title & Favicon ===-->
         <title>Zoben - Job Board & Career Portal HTML Template</title>
         <link rel="icon" type="image/png" href="assets/images/favicon.png">
+        <style>
+        .alert {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .alert-error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+    </style>
     </head>
     <body>
         <!-- Pre Loader -->
@@ -58,7 +84,7 @@ include('profile.php');
         <!-- Start Sidemenu Area -->
         <div class="sidemenu-area">
             <div class="sidemenu-header">
-                <a href="candidates-dashboard.html" class="navbar-brand d-flex align-items-center">
+                 <a href="dashboard.html" class="navbar-brand d-flex align-items-center">
                     <img src="assets/images/logo.png" class="logo-one" alt="Logo">
                     <img src="assets/images/logo-2.png" class="logo-two" alt="Logo">
                 </a>
@@ -72,8 +98,8 @@ include('profile.php');
 
             <div class="sidemenu-body">
                 <ul class="sidemenu-nav metisMenu h-100" id="sidemenu-nav" data-simplebar>
-                    <li class="nav-item active">
-                        <a href="candidates-dashboard.php" class="nav-link">
+                    <li class="nav-item">
+                        <a href="dashboard.html" class="nav-link">
                             <span class="icon"><i class="ri-home-line"></i></span>
                             <span class="menu-title">Dashboard</span>
                         </a>
@@ -87,37 +113,37 @@ include('profile.php');
                     </li>
 
                     <li class="nav-item">
-                        <a href="candidates-dashboard-my-resume.php" class="nav-link">
-                            <span class="icon"><i class="ri-file-list-line"></i></span>
-                            <span class="menu-title">My Resume</span>
+                        <a href="dashboard-post-job.html" class="nav-link">
+                            <span class="icon"><i class="ri-send-plane-fill"></i></span>
+                            <span class="menu-title">Post a New Job</span>
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a href="candidates-dashboard-applied-job.html" class="nav-link">
+                        <a href="dashboard-manage-job.html" class="nav-link">
                             <span class="icon"><i class="ri-briefcase-line"></i></span>
-                            <span class="menu-title">Applied Jobs</span>
+                            <span class="menu-title">Manage Jobs</span>
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a href="candidates-dashboard-job-alerts.html" class="nav-link">
-                            <span class="icon"><i class="ri-notification-3-line"></i></span>
-                            <span class="menu-title">Job Alerts</span>
+                        <a href="dashboard-applicants.html" class="nav-link">
+                            <span class="icon"><i class="ri-file-list-line"></i></span>
+                            <span class="menu-title">All Applicants</span>
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a href="candidates-dashboard-shortlisted-job.html" class="nav-link">
+                        <a href="dashboard-submit-resume.php" class="nav-link">
                             <span class="icon"><i class="ri-bookmark-line"></i></span>
-                            <span class="menu-title">Shortlisted Jobs</span>
+                            <span class="menu-title">Submit Resumes</span>
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a href="candidates-dashboard-cv-manager.html" class="nav-link">
-                            <span class="icon"><i class="ri-book-line"></i></span>
-                            <span class="menu-title">CV Manager</span>
+                        <a href="dashboard-shorlisted-resume.html" class="nav-link">
+                            <span class="icon"><i class="ri-list-check"></i></span>
+                            <span class="menu-title">Shortlisted Resumes</span>
                         </a>
                     </li>
 
@@ -143,6 +169,13 @@ include('profile.php');
                     </li>
 
                     <li class="nav-item">
+                        <a href="dashboard-resume-alerts.html" class="nav-link">
+                            <span class="icon"><i class="ri-alert-line"></i></span>
+                            <span class="menu-title">Resume Alerts</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item active">
                         <a href="dashboard-change-password.php" class="nav-link">
                             <span class="icon"><i class="ri-lock-line"></i></span>
                             <span class="menu-title">Change Password</span>
@@ -157,7 +190,7 @@ include('profile.php');
                     </li>
 
                     <li class="nav-item">
-                        <a href="userlogout.php" class="nav-link">
+                        <a href="index.html" class="nav-link">
                             <span class="icon"><i class="ri-logout-circle-r-line"></i></span>
                             <span class="menu-title">Logout</span>
                         </a>
@@ -176,7 +209,7 @@ include('profile.php');
 
         <!-- Start Main Dashboard Content Wrapper Area -->
         <div class="main-dashboard-content d-flex flex-column">
-            
+
             <!-- Start Navbar Area -->
             <div class="navbar-area">
                 <div class="main-responsive-nav">
@@ -460,8 +493,10 @@ include('profile.php');
                                     <div class="dropdown profile-nav-item">
                                         <a href="#" class="dropdown-bs-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <div class="menu-profile">
+                                            
                                             <img src="<?= !empty($user['profile_picture']) ? $user['profile_picture'] : 'assets/images/user-img/user.png' ?>" alt="Profile Preview" class="profile-img" style="width:50px;" />
-                                            <span class="name"><?= htmlspecialchars($user['full_name']) ?></span>
+
+                                                <span class="name"><?= htmlspecialchars($user['full_name']) ?></span>
                                             </div>
                                         </a>
             
@@ -476,6 +511,7 @@ include('profile.php');
                                                     
                                                     <p class="mb-3 email"><?= htmlspecialchars($user['email']) ?></p>
                                                 </div>
+
                                                 <?php if (!empty($user['inserted_date'])): ?>
                                                     <p class="inserted_date" style="font-size:15px">last updated: 
                                                 <?php echo date("F j, Y", strtotime($user['inserted_date'])); ?>
@@ -502,9 +538,9 @@ include('profile.php');
                                                     </li>
                                 
                                                     <li class="nav-item">
-                                                        <a href="candidates-dashboard-my-resume.php" class="nav-link">
+                                                        <a href="dashboard-submit-resume.html" class="nav-link">
                                                             <span class="icon"><i class="ri-close-line"></i></span>
-                                                            <span class="menu-title">Submit Resumes</span>
+                                                            <span class="menu-title">View Resumes</span>
                                                         </a>
                                                     </li>
                                 
@@ -520,7 +556,7 @@ include('profile.php');
                                             <div class="dropdown-footer">
                                                 <ul class="profile-nav">
                                                     <li class="nav-item">
-                                                        <a href="index.html" class="nav-link"><i class="ri-logout-box-r-line"></i> <span>Logout</span></a>
+                                                        <a href="userlogout.php" class="nav-link"><i class="ri-logout-box-r-line"></i> <span>Logout</span></a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -549,27 +585,37 @@ include('profile.php');
                                         <div class="dropdown profile-nav-item">
                                             <a href="#" class="dropdown-bs-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <div class="menu-profile">
-                                                    <img src="assets/images/user-img/user-img2.jpg" class="rounded-circle" alt="image">
-                                                    <span class="name">My Account</span>
+                                                <img src="<?= !empty($user['profile_picture']) ? $user['profile_picture'] : 'assets/images/user-img/user.png' ?>" alt="Profile Preview" class="profile-img" style="width:50px;" />
+
+                                                <span class="name"><?= htmlspecialchars($user['full_name']) ?></span>
                                                 </div>
-                                            </a>
-                
-                                            <div class="dropdown-menu">
+                                                </a>
+
+                                                <div class="dropdown-menu">
                                                 <div class="dropdown-header d-flex flex-column align-items-center">
-                                                    <div class="figure mb-3">
-                                                        <img src="assets/images/user-img/user-img2.jpg" class="rounded-circle" alt="image">
-                                                    </div>
-                
-                                                    <div class="info text-center">
-                                                        <span class="name">Andy Smith</span>
-                                                        <p class="mb-3 email"><a href="https://templates.hibootstrap.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="89e1ece5e5e6c9e8e7edfbe6fae4e0fde1a7eae6e4">[email&#160;protected]</a></p>
-                                                    </div>
+                                                <div class="figure mb-3">
+                                                <img src="<?= !empty($user['profile_picture']) ? $user['profile_picture'] : 'assets/images/user-img/user.png' ?>" alt="Profile Preview" class="profile-img" style="width:100px;" />
+                                                </div>
+
+                                                <div class="info text-center">
+                                                    <span class="name"><?= htmlspecialchars($user['full_name']) ?></span>
+                                                    
+                                                    <p class="mb-3 email"><?= htmlspecialchars($user['email']) ?></p>
+                                                </div>
+
+                                                <?php if (!empty($user['inserted_date'])): ?>
+                                                    <p class="inserted_date" style="font-size:15px">last updated: 
+                                                <?php echo date("F j, Y", strtotime($user['inserted_date'])); ?>
+                                                    </p>
+                                                <?php else: ?>
+                                                        <p class="inserted_date">Profile has not been updated yet.</p>
+                                                <?php endif; ?>
                                                 </div>
                 
                                                 <div class="dropdown-body">
                                                     <ul class="profile-nav p-0 pt-3">
                                                         <li class="nav-item active">
-                                                            <a href="dashboard.html" class="nav-link">
+                                                            <a href="candidates-dashboard.php" class="nav-link">
                                                                 <span class="icon"><i class="ri-home-line"></i></span>
                                                                 <span class="menu-title">Dashboard</span>
                                                             </a>
@@ -583,8 +629,8 @@ include('profile.php');
                                                         </li>
                                     
                                                         <li class="nav-item">
-                                                            <a href="dashboard-submit-resume.html" class="nav-link">
-                                                                <span class="icon"><i class="ri-close-line"></i></span>
+                                                            <a href="dashboard-submit-resume.php" class="nav-link">
+                                                                <span class="icon"><i class="ri-bookmark-line"></i></span>
                                                                 <span class="menu-title">Submit Resumes</span>
                                                             </a>
                                                         </li>
@@ -618,470 +664,57 @@ include('profile.php');
 
             <!-- Breadcrumb Area -->
             <div class="breadcrumb-area">
-                <h1>Howdy, Invision!</h1>
+                <h1>Change Password</h1>
                 <ol class="breadcrumb">
                     <li class="item"><a href="dashboard.html">Home</a></li>
-                    <li class="item">Dashboard</li>
+                    <li class="item">Change Password</li>
                 </ol>
             </div>
             <!-- End Breadcrumb Area -->
 
-            <!-- End Notification Alert Area -->
+            <!-- Start Change Password Area -->
+            <div class="change-password-box">
+        <h3>Change Password</h3>
+        <div class="bar"></div>
 
-            <!-- Start Dashboard Fun Fact Area -->
-            <div class="dashboard-fun-fact-area">
-                <div class="row">
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="stats-fun-fact-box">
-                            <div class="icon-box">
-                                <i class="ri-briefcase-line"></i>
-                            </div>
-                            <span class="sub-title">Posted Jobs</span>
-                            <h3>100</h3>
-                        </div>
-                    </div>
-    
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="stats-fun-fact-box">
-                            <div class="icon-box">
-                                <i class="ri-file-list-line"></i>
-                            </div>
-                            <span class="sub-title">Application</span>
-                            <h3>6382</h3>
-                        </div>
-                    </div>
-    
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="stats-fun-fact-box">
-                            <div class="icon-box">
-                                <i class="ri-chat-2-line"></i>
-                            </div>
-                            <span class="sub-title">Messages</span>
-                            <h3>85</h3>
-                        </div>
-                    </div>
-    
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="stats-fun-fact-box">
-                            <div class="icon-box">
-                                <i class="ri-close-line"></i>
-                            </div>
-                            <span class="sub-title">Shortlist</span>
-                            <h3>57</h3>
-                        </div>
-                    </div>
-                </div>
+        <!-- Display success or error message -->
+        <?php if (!empty($message)): ?>
+            <div class="alert <?= $message_type === 'success' ? 'alert-success' : 'alert-error' ?>">
+                <?= htmlspecialchars($message) ?>
             </div>
-            <!-- End Dashboard Fun Fact Area -->
+        <?php endif; ?>
 
-            <!-- Start Notifications and Invoices Area -->
+        <!-- Change Password Form -->
+        <form method="POST" action="Change-password.php">
             <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    <div class="recent-notifications-box">
-                        <h3>Recent Notifications</h3>
-
-                        <ul>
-                            <li>
-                                <div class="icon">
-                                  <i class="ri-briefcase-2-line"></i>
-                                </div>
-                                <span>Tyrone Lowe</span> Applied For A Job <strong>Software Engineer</strong>
-                                <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </li>
-
-                            <li>
-                                <div class="icon">
-                                  <i class="ri-briefcase-2-line"></i>
-                                </div>
-                                <span>Kaedyn Fraser</span> Applied For A Job <strong>Web Developer</strong>
-                                <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </li>
-
-                            <li>
-                                <div class="icon">
-                                  <i class="ri-briefcase-2-line"></i>
-                                </div>
-                                <span>Harold Adams</span> Applied For A Job <strong>Technical Architect</strong>
-                                <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </li>
-
-                            <li>
-                                <div class="icon">
-                                  <i class="ri-briefcase-2-line"></i>
-                                </div>
-                                <span>Joshua Mcnair</span> Applied For A Job <strong>UI Designer</strong>
-                                <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </li>
-
-                            <li>
-                                <div class="icon">
-                                  <i class="ri-briefcase-2-line"></i>
-                                </div>
-                                <span>Kathryn Mcgee</span> Applied For A Job <strong>Senior Product Designer</strong>
-                                <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </li>
-
-                            <li>
-                                <div class="icon">
-                                  <i class="ri-briefcase-2-line"></i>
-                                </div>
-                                <span>Kaedyn Fraser</span> Applied For A Job <strong>Product Designer</strong>
-                                <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </li>
-
-                            <li>
-                                <div class="icon">
-                                  <i class="ri-briefcase-2-line"></i>
-                                </div>
-                                <span>Dianna Smiley</span> Applied For A Job <strong>Android Developer</strong>
-                                <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </li>
-
-                            <li>
-                                <div class="icon">
-                                  <i class="ri-briefcase-2-line"></i>
-                                </div>
-                                <span>Micheal Murphy</span> Applied For A Job <strong>Digital Marketer</strong>
-                                <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </li>
-
-                            <li>
-                                <div class="icon">
-                                  <i class="ri-briefcase-2-line"></i>
-                                </div>
-                                <span>Yamilet Booker</span> Applied For A Job <strong>Senior Data Engineer</strong>
-                                <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </li>
-
-                            <li>
-                                <div class="icon">
-                                  <i class="ri-briefcase-2-line"></i>
-                                </div>
-                                <span>Milana Myles</span> Applied For A Job <strong>Shopify Developer</strong>
-                                <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </li>
-                        </ul>
+                <div class="col-lg-12 col-md-12">
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <input type="password" name="current_password" class="form-control" placeholder="Enter Current Password" required>
+                    </div>
+                </div>
+                
+                <div class="col-lg-12 col-md-12">
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" name="new_password" class="form-control" placeholder="Enter New Password" required>
+                    </div>
+                </div>
+                
+                <div class="col-lg-12 col-md-12">
+                    <div class="form-group">
+                        <label>Confirm New Password</label>
+                        <input type="password" name="confirm_password" class="form-control" placeholder="Confirm New Password" required>
                     </div>
                 </div>
 
-                <div class="col-lg-6 col-md-12">
-                    <div class="invoices-box">
-                        <h3>Invoices</h3>
-
-                        <ul>
-                            <li>
-                                <div class="icon">
-                                    <i class="ri-file-line"></i>
-                                </div>
-                                <ul>
-                                    <li class="paid">Paid</li>
-                                    <li>Order: #181815</li>
-                                    <li>Date: 14/08/2024</li>
-                                </ul>
-                                <span>Premium Plan</span>
-                                <a href="dashboard-invoice.html" class="default-btn">View Invoice</a>
-                            </li>
-
-                            <li>
-                                <div class="icon">
-                                    <i class="ri-file-line"></i>
-                                </div>
-                                <ul>
-                                    <li class="unpaid">Unpaid</li>
-                                    <li>Order: #181814</li>
-                                    <li>Date: 13/08/2024</li>
-                                </ul>
-                                <span>Advance Plan</span>
-                                <a href="dashboard-invoice.html" class="default-btn">View Invoice</a>
-                            </li>
-
-                            <li>
-                                <div class="icon">
-                                    <i class="ri-file-line"></i>
-                                </div>
-                                <ul>
-                                    <li class="paid">Paid</li>
-                                    <li>Order: #181813</li>
-                                    <li>Date: 12/08/2024</li>
-                                </ul>
-                                <span>Starter Plan</span>
-                                <a href="dashboard-invoice.html" class="default-btn">View Invoice</a>
-                            </li>
-
-                            <li>
-                                <div class="icon">
-                                    <i class="ri-file-line"></i>
-                                </div>
-                                <ul>
-                                    <li class="unpaid">Unpaid</li>
-                                    <li>Order: #181812</li>
-                                    <li>Date: 11/08/2024</li>
-                                </ul>
-                                <span>Basic Plan</span>
-                                <a href="dashboard-invoice.html" class="default-btn">View Invoice</a>
-                            </li>
-
-                            <li>
-                                <div class="icon">
-                                    <i class="ri-file-line"></i>
-                                </div>
-                                <ul>
-                                    <li class="paid">Paid</li>
-                                    <li>Order: #181815</li>
-                                    <li>Date: 14/08/2024</li>
-                                </ul>
-                                <span>Premium Plan</span>
-                                <a href="dashboard-invoice.html" class="default-btn">View Invoice</a>
-                            </li>
-
-                            <li>
-                                <div class="icon">
-                                    <i class="ri-file-line"></i>
-                                </div>
-                                <ul>
-                                    <li class="unpaid">Unpaid</li>
-                                    <li>Order: #181814</li>
-                                    <li>Date: 13/08/2024</li>
-                                </ul>
-                                <span>Advance Plan</span>
-                                <a href="dashboard-invoice.html" class="default-btn">View Invoice</a>
-                            </li>
-
-                            <li>
-                                <div class="icon">
-                                    <i class="ri-file-line"></i>
-                                </div>
-                                <ul>
-                                    <li class="paid">Paid</li>
-                                    <li>Order: #181813</li>
-                                    <li>Date: 12/08/2024</li>
-                                </ul>
-                                <span>Starter Plan</span>
-                                <a href="dashboard-invoice.html" class="default-btn">View Invoice</a>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="col-lg-12 col-md-12">
+                    <button type="submit" class="default-btn">Change Password</button>
                 </div>
             </div>
-            <!-- End Notifications and Invoices Area -->
-
-            <!-- Start Recent Jobs Area -->
-            <div class="dashboard-jobs-box">
-                <h2>Jobs Applied Recently</h2>
-
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="recent-job-card box-shadow">
-                            <div class="content">
-                                <div class="recent-job-img">
-                                    <a href="job-details.html">
-                                        <img src="assets/images/recent-job/recent-job4.jpg" alt="Images">
-                                    </a>
-                                </div>
-        
-                                <h3><a href="job-details.html">Product Designer</a></h3>
-                                
-                                <ul class="job-list1">
-                                    <li><i class="ri-briefcase-line"></i> Design</li>
-                                    <li><i class="ri-time-line"></i> 2 Week Ago</li>
-                                </ul>
-                                <span><i class="ri-map-pin-line"></i> 305 Hicks St Brooklyn, NY</span>
-                            </div>
-
-                            <div class="job-sub-content">
-                                <ul class="job-list2">
-                                    <li class="time">Full Time</li>
-                                    <li class="freelance">Freelance</li>
-                                    <li class="urgent">Urgent</li>
-                                </ul>
-
-                                <div class="price">$150 - $180 <b>/Per Week</b></div>
-                            </div>
-                           
-                            <button class="bookmark-btn"><i class="ri-close-line"></i></button>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6">
-                        <div class="recent-job-card box-shadow">
-                            <div class="content">
-                                <div class="recent-job-img">
-                                    <a href="job-details.html">
-                                        <img src="assets/images/recent-job/recent-job5.jpg" alt="Images">
-                                    </a>
-                                </div>
-        
-                                <h3><a href="job-details.html">Creative Director</a></h3>
-                                
-                                <ul class="job-list1">
-                                    <li><i class="ri-briefcase-line"></i> Automotive Jobs</li>
-                                    <li><i class="ri-time-line"></i> 2 Hour Ago</li>
-                                </ul>
-                                <span><i class="ri-map-pin-line"></i> 105 San Antonio, TX</span>
-                            </div>
-
-                            <div class="job-sub-content">
-                                <ul class="job-list2">
-                                    <li class="time">Full Time</li>
-                                    <li class="freelance">Freelance</li>
-                                </ul>
-
-                                <div class="price">$120 - $140 <b>/Per Week</b></div>
-                            </div>
-                           
-                            <button class="bookmark-btn"><i class="ri-close-line"></i></button>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6">
-                        <div class="recent-job-card box-shadow">
-                            <div class="content">
-                                <div class="recent-job-img">
-                                    <a href="job-details.html">
-                                        <img src="assets/images/recent-job/recent-job6.jpg" alt="Images">
-                                    </a>
-                                </div>
-        
-                                <h3><a href="job-details.html">General Ledger Accountant</a></h3>
-                                
-                                <ul class="job-list1">
-                                    <li><i class="ri-briefcase-line"></i> Accounting  & Finance</li>
-                                    <li><i class="ri-time-line"></i> 1 Day Ago</li>
-                                </ul>
-                                <span><i class="ri-map-pin-line"></i> 320 Los Angeles, CA</span>
-                            </div>
-
-                            <div class="job-sub-content">
-                                <ul class="job-list2">
-                                    <li class="time">Full Time</li>
-                                    <li class="freelance">Freelance</li>
-                                    <li class="internship">Internship</li>
-                                </ul>
-
-                                <div class="price">$120 - $140 <b>/Per Week</b></div>
-                            </div>
-                           
-                            <button class="bookmark-btn"><i class="ri-close-line"></i></button>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6">
-                        <div class="recent-job-card box-shadow">
-                            <div class="content">
-                                <div class="recent-job-img">
-                                    <a href="job-details.html">
-                                        <img src="assets/images/recent-job/recent-job7.jpg" alt="Images">
-                                    </a>
-                                </div>
-        
-                                <h3><a href="job-details.html">Finance Manager & Health </a></h3>
-                                
-                                <ul class="job-list1">
-                                    <li><i class="ri-briefcase-line"></i> Medical & Health</li>
-                                    <li><i class="ri-time-line"></i> 5 Days Ago</li>
-                                </ul>
-                                <span><i class="ri-map-pin-line"></i> 320 Atlanta, GA</span>
-                            </div>
-
-                            <div class="job-sub-content">
-                                <ul class="job-list2">
-                                    <li class="time">Full Time</li>
-                                    <li class="freelance">Freelance</li>
-                                    <li class="urgent">Urgent</li>
-                                </ul>
-
-                                <div class="price">$30 - $40 <b>/Per Hour</b></div>
-                            </div>
-                           
-                            <button class="bookmark-btn"><i class="ri-close-line"></i></button>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6">
-                        <div class="recent-job-card box-shadow">
-                            <div class="content">
-                                <div class="recent-job-img">
-                                    <a href="job-details.html">
-                                        <img src="assets/images/recent-job/recent-job8.jpg" alt="Images">
-                                    </a>
-                                </div>
-        
-                                <h3><a href="job-details.html">Group Marketing Manager</a></h3>
-                                
-                                <ul class="job-list1">
-                                    <li><i class="ri-briefcase-line"></i> Customer</li>
-                                    <li><i class="ri-time-line"></i> 3 Days Ago</li>
-                                </ul>
-                                <span><i class="ri-map-pin-line"></i> 305 Hicks St Brooklyn, NY</span>
-                            </div>
-
-                            <div class="job-sub-content">
-                                <ul class="job-list2">
-                                    <li class="time">Full Time</li>
-                                    <li class="freelance">Freelance</li>
-                                    <li class="urgent">Urgent</li>
-                                </ul>
-
-                                <div class="price">$30 - $40 <b>/Per Hour</b></div>
-                            </div>
-                           
-                            <button class="bookmark-btn"><i class="ri-close-line"></i></button>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6">
-                        <div class="recent-job-card box-shadow">
-                            <div class="content">
-                                <div class="recent-job-img">
-                                    <a href="job-details.html">
-                                        <img src="assets/images/recent-job/recent-job9.jpg" alt="Images">
-                                    </a>
-                                </div>
-        
-                                <h3><a href="job-details.html">iOS Developer</a></h3>
-                                
-                                <ul class="job-list1">
-                                    <li><i class="ri-briefcase-line"></i> IT Agency</li>
-                                    <li><i class="ri-time-line"></i> 1 Days Ago</li>
-                                </ul>
-                                <span><i class="ri-map-pin-line"></i> Los Angeles, CA</span>
-                            </div>
-
-                            <div class="job-sub-content">
-                                <ul class="job-list2">
-                                    <li class="time">Full Time</li>
-                                    <li class="freelance">Freelance</li>
-                                </ul>
-
-                                <div class="price">$20 - $30 <b>/Per Hour</b></div>
-                            </div>
-                           
-                            <button class="bookmark-btn"><i class="ri-close-line"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- End Recent Jobs Area -->
+        </form>
+    </div>
+            <!-- Start Change Password Area -->
 
             <!-- Start Copyright Area -->
             <div class="copyrights-area">
@@ -1097,41 +730,44 @@ include('profile.php');
             </div>
             <!-- End Copyright Area -->
         </div>
-            
-        <script src="assets/js/jquery.min.js"></script>
-      
-        <script src="assets/js/bootstrap.bundle.min.js"></script>
-       
-        <script src="assets/js/jquery.magnific-popup.min.js"></script>
-       
-        <script src="assets/js/odometer.min.js"></script>
-      
-        <script src="assets/js/jquery.appear.min.js"></script>
-       
-        <script src="assets/js/meanmenu.min.js"></script>
-       
-        <script src="assets/js/metismenu.min.js"></script>
-      
-        <script src="assets/js/simplebar.min.js"></script>
-      
-        <script src="assets/js/dropzone.min.js"></script>
-      
-        <script src="assets/js/sticky-sidebar.min.js"></script>
         
-        <script src="assets/js/tweenMax.min.js"></script>
-       
-        <script src="assets/js/owl.carousel.min.js"></script>
-       
-        <script src="assets/js/wow.min.js"></script>
-        
-        <script src="assets/js/jquery.ajaxchimp.min.js"></script>
-        
-        <script src="assets/js/form-validator.min.js"></script>
-       
-        <script src="assets/js/contact-form-script.js"></script>
-        
-        <script src="assets/js/custom.js"></script>
 
+        <!-- Jquery Min JS -->
+        <script src="assets/js/jquery.min.js"></script>
+        <!-- Bootstrap Bundle Min JS -->
+        <script src="assets/js/bootstrap.bundle.min.js"></script>
+        <!--=== Magnific Popup Min JS ===-->
+        <script src="assets/js/jquery.magnific-popup.min.js"></script>
+        <!--=== Odometer Min JS ===-->
+        <script src="assets/js/odometer.min.js"></script>
+        <!-- Appear Min JS -->
+        <script src="assets/js/jquery.appear.min.js"></script>
+        <!--=== meanMenu Min JS ===-->
+        <script src="assets/js/meanmenu.min.js"></script>
+        <!--=== metisMenu Min JS ===-->
+        <script src="assets/js/metismenu.min.js"></script>
+        <!--=== simpleBar Min JS ===-->
+        <script src="assets/js/simplebar.min.js"></script>
+        <!-- Dropzone JS -->
+        <script src="assets/js/dropzone.min.js"></script>
+        <!-- Sticky Sidebar JS -->
+        <script src="assets/js/sticky-sidebar.min.js"></script>
+        <!-- TweenMax JS -->
+        <script src="assets/js/tweenMax.min.js"></script>
+        <!-- Owl Carousel JS -->
+        <script src="assets/js/owl.carousel.min.js"></script>
+        <!-- Wow Min JS -->
+        <script src="assets/js/wow.min.js"></script>
+        <!--=== ajaxChimp Min JS ===-->
+        <script src="assets/js/jquery.ajaxchimp.min.js"></script>
+        <!-- Form Validator Min JS -->
+        <script src="assets/js/form-validator.min.js"></script>
+        <!-- Contact Form JS -->
+        <script src="assets/js/contact-form-script.js"></script>
+        <!--=== Custom JS ===-->
+        <script src="assets/js/custom.js"></script>
         
     </body>
+
+<!-- Mirrored from templates.hibootstrap.com/zoben/default/dashboard-change-password.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 06 Nov 2024 10:02:58 GMT -->
 </html>

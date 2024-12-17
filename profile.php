@@ -5,14 +5,12 @@ include('connection.php');
 $user_id = null;
 $user_full_name = null;
 $user_email = null;
-
+$message='';
 if (isset($_SESSION['user_id'])) {
-
     $user_id = $_SESSION['user_id'];
     $user_full_name = $_SESSION['user_full_name'];
     $user_email = $_SESSION['user_email'];
 } elseif (isset($_COOKIE['user_email']) && isset($_COOKIE['user_password'])) {
-
     $email = $_COOKIE['user_email'];
     $password = $_COOKIE['user_password'];
 
@@ -26,7 +24,6 @@ if (isset($_SESSION['user_id'])) {
         $user = $result->fetch_assoc();
 
         if (password_verify($password, $user['password'])) {
-
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['user_full_name'] = $user['full_name'];
             $_SESSION['user_email'] = $user['email'];
@@ -34,26 +31,28 @@ if (isset($_SESSION['user_id'])) {
             $user_id = $user['user_id'];
             $user_full_name = $user['full_name'];
             $user_email = $user['email'];
-        } else {
 
+          
+            $_SESSION['message'] = "Login successful!";
+            $_SESSION['message_type'] = "success";  
+        } else {
             $_SESSION['message'] = "Invalid credentials from cookies.";
+            $_SESSION['message_type'] = "error";  
             header("Location: loginuser.php");
             exit;
         }
     } else {
-
         $_SESSION['message'] = "No user found.";
+        $_SESSION['message_type'] = "error"; 
         header("Location: loginuser.php");
         exit;
     }
 } else {
-
     header("Location: loginuser.php");
     exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $full_name = $_POST['full_name'] ?? $user_full_name;
     $email = $_POST['email'] ?? $user_email;
     $mobile = $_POST['mobile'] ?? null;
@@ -80,10 +79,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         move_uploaded_file($_FILES['profile_picture']['tmp_name'], $profile_picture);
     }
 
-    $resume_path = null;
+    $resume_path = $user['resume_path']; // Get the current resume path from the database
+
+    // Check if a new resume file was uploaded
     if (isset($_FILES['resume_path']) && $_FILES['resume_path']['error'] == 0) {
+        // Move the new uploaded file
         $resume_path = 'assets/resumes/' . basename($_FILES['resume_path']['name']);
         move_uploaded_file($_FILES['resume_path']['tmp_name'], $resume_path);
+
+        // If there's an existing resume, delete the old file
+        if (!empty($user['resume_path']) && file_exists($user['resume_path'])) {
+            unlink($user['resume_path']); // Delete old resume
+        }
+    } elseif (isset($_POST['current_resume']) && !empty($_POST['current_resume'])) {
+        // If no new file is uploaded, use the existing resume path
+        $resume_path = $_POST['current_resume'];
     }
 
     $sql = "UPDATE users SET 
@@ -138,10 +148,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($stmt->execute()) {
         $_SESSION['message'] = "Profile updated successfully.";
+        $_SESSION['message_type'] = "success";  
         header("Location: candidates-dashboard-my-profile.php");
         exit;
     } else {
         $_SESSION['message'] = "Failed to update profile. Please try again.";
+        $_SESSION['message_type'] = "error";
         header("Location: candidates-dashboard-my-profile.php");
         exit;
     }
@@ -165,7 +177,6 @@ if ($resume_path && file_exists($resume_path)) {
 $stmt->close();
 $conn->close();
 
-// Calculate profile completion percentage
 $fields = [
     'profile_picture', 'resume_path', 'full_name', 'email', 'mobile', 
     'dob', 'gender', 'correspondent_address', 'permanent_address', 
@@ -182,20 +193,4 @@ foreach ($fields as $field) {
 
 $total_fields = count($fields);
 $completion_percentage = ($completed_fields / $total_fields) * 100;
-
-
-// Prepare the message for incomplete fields
-$incomplete_fields = [];
-
-foreach ($fields as $field) {
-    if (empty($user[$field])) {
-        $incomplete_fields[] = ucfirst(str_replace('_', ' ', $field));
-    }
-}
-
-$message = '';
-if (count($incomplete_fields) > 0) {
-    $message = 'You still need to fill out the following fields to complete your profile: ' . implode(', ', $incomplete_fields);
-}
-
 ?>

@@ -2,8 +2,6 @@
 include('connection.php'); 
 include('profile.php'); 
 ?>
-
-
 <!DOCTYPE html>
 <html lang="zxx">
     
@@ -80,7 +78,7 @@ include('profile.php');
 
 
         .floating-message.error {
-            background-color: #f44336; 
+            background-color: #4CAF50; 
         }
         .inserted_date {
             font-size: 14px;
@@ -130,23 +128,22 @@ include('profile.php');
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            color: white;
-            font-weight: bold;
+            color: black;
+            
         }
         .profile-img-container-square {
-    position: relative;
-    display: inline-block;
-    width: 120px; /* Set the desired width */
-    height: 120px; /* Set the desired height */
-    border: 3px solid #ccc; /* Border around the profile image */
-    border-radius: 10px; /* Optional: to add rounded corners to the container */
-    overflow: hidden;
+        position: relative;
+        display: inline-block;
+        width: 150px; 
+        height: 140px;
+        
+        overflow: hidden;
 }
 
 .profile-img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Ensures the image fits within the square container */
+    object-fit: cover;
 }
 
 .completion-bar-wrapper {
@@ -155,7 +152,7 @@ include('profile.php');
     left: 0;
     width: 100%;
     height: 100%;
-    border-radius: 10px; /* Matches the container’s border radius */
+    border-radius: 10px; 
     box-sizing: border-box;
 }
 
@@ -166,8 +163,8 @@ include('profile.php');
     width: 100%;
     height: 100%;
     background-color: transparent;
-    border: 3px solid transparent; /* Makes sure there's no solid color filling the image */
-    border-radius: 10px; /* Optional: to match the container’s rounded edges */
+    border: 3px solid transparent; 
+    border-radius: 10px; 
 }
 
 .progress-bar:before {
@@ -178,7 +175,7 @@ include('profile.php');
     width: 100%;
     height: 100%;
     border: 3px solid transparent;
-    border-top-color: #4CAF50; /* Green border for the completion bar */
+    border-top-color: #4CAF50; 
     border-radius: 10px;
     box-sizing: border-box;
     transform: scaleX(0);
@@ -195,20 +192,17 @@ include('profile.php');
     }
 }
 
-
 </style>
     </head>
     <body>
-    <?php if ($messages): ?>
-        <div class="floating-message <?= strpos($messages, 'successfully') !== false ? '' : 'error' ?>" id="floatingMessage">
-            <?php echo htmlspecialchars($messages); ?>
-        </div>
-    <?php endif; ?>
-    <?php if ($message): ?>
-        <div class="floating-message" id="floatingMessage">
-            <?php echo htmlspecialchars($message); ?>
-        </div>
-    <?php endif; ?>
+    <?php if (isset($_SESSION['message']) && !empty($_SESSION['message'])): ?>
+    <div class="floating-message <?= strpos($_SESSION['message'], 'successfully') !== false ? '' : 'error' ?>" id="floatingMessage">
+        <?php echo htmlspecialchars($_SESSION['message']); ?>
+    </div>
+    <?php unset($_SESSION['message']); ?> <!-- yash Clear message after it's shown -->
+<?php endif; ?>
+
+
         <!-- Pre Loader -->
         <div class="preloader">
             <div class="d-table">
@@ -307,7 +301,7 @@ include('profile.php');
                     </li>
 
                     <li class="nav-item">
-                        <a href="dashboard-change-password.html" class="nav-link">
+                        <a href="dashboard-change-password.php" class="nav-link">
                             <span class="icon"><i class="ri-lock-line"></i></span>
                             <span class="menu-title">Change Password</span>
                         </a>
@@ -669,9 +663,9 @@ include('profile.php');
                                                     </li>
                                 
                                                     <li class="nav-item">
-                                                        <a href="dashboard-submit-resume.html" class="nav-link">
+                                                        <a href="candidates-dashboard-my-resume.php" class="nav-link">
                                                             <span class="icon"><i class="ri-close-line"></i></span>
-                                                            <span class="menu-title">Submit Resumes</span>
+                                                            <span class="menu-title">View Resumes</span>
                                                         </a>
                                                     </li>
                                 
@@ -809,7 +803,7 @@ include('profile.php');
                             <div class="icon-box">
                                 <i class="ri-chat-2-line"></i>
                             </div>
-                            <span class="sub-title">Messages</span>
+                            <span class="sub-title">Mesages</span>
                             <h3>85</h3>
                         </div>
                     </div>
@@ -958,35 +952,37 @@ include('profile.php');
                             </div>
                         </div>
 
+                        
                         <div class="col-xl-6 col-lg-12 col-md-12">
                             <div class="form-group select-group">
-                            <label for="resume_path">Resume</label>
-        
-                            <input 
-                                type="file" 
-                                id="resume_path" 
-                                name="resume_path" 
-                                class="form-control" 
-                                accept=".pdf,.doc,.docx"
-                                onchange="updateResumeName(this)"
-                                value="<?= htmlspecialchars(($user['resume_path'])) ?>"
-                            >
-                            <?php if (!empty($user['resume_path'])): ?>
-                                <small>
-                                    <span id="currentResumeName">
-                                        Current Resume: <?= htmlspecialchars(basename($user['resume_path'])) ?>
-                                    </span>
-                                </small>
+                                <label for="resume_path">Resume</label>
 
                                 <input 
-                                    type="hidden" 
+                                    type="file" 
+                                    id="resume_path" 
                                     name="resume_path" 
-                                    value="<?= htmlspecialchars($user['resume_path']) ?>">
-                            <?php else: ?>
-                                <small id="currentResumeName">No resume uploaded yet.</small>
-                            <?php endif; ?>
+                                    class="form-control" 
+                                    accept=".pdf,.doc,.docx"
+                                    onchange="updateResumeName(this)"
+                                >
+                                
+                                <?php if (!empty($user['resume_path'])): ?>
+                                    <small>
+                                        <span id="currentResumeName">
+                                            Uploaded Resume: <?= htmlspecialchars(basename($user['resume_path'])) ?>
+                                        </span>
+                                    </small>
+
+                                    <input 
+                                        type="hidden" 
+                                        name="current_resume" 
+                                        value="<?= htmlspecialchars($user['resume_path']) ?>">
+                                <?php else: ?>
+                                    <small id="currentResumeName">No resume uploaded yet.</small>
+                                <?php endif; ?>
                             </div>
                         </div>
+
 
                         <div class="col-xl-6 col-lg-12 col-md-12">
                             <div class="form-group select-group">
@@ -1069,90 +1065,79 @@ include('profile.php');
         </div>
        
 
-        <!-- Jquery Min JS -->
         <script src="assets/js/jquery.min.js"></script>
-        <!-- Bootstrap Bundle Min JS -->
+       
         <script src="assets/js/bootstrap.bundle.min.js"></script>
-        <!--=== Magnific Popup Min JS ===-->
+       
         <script src="assets/js/jquery.magnific-popup.min.js"></script>
-        <!--=== Odometer Min JS ===-->
+      
         <script src="assets/js/odometer.min.js"></script>
-        <!-- Appear Min JS -->
+       
         <script src="assets/js/jquery.appear.min.js"></script>
-        <!--=== meanMenu Min JS ===-->
+       
         <script src="assets/js/meanmenu.min.js"></script>
-        <!--=== metisMenu Min JS ===-->
+       
         <script src="assets/js/metismenu.min.js"></script>
-        <!--=== simpleBar Min JS ===-->
+        
         <script src="assets/js/simplebar.min.js"></script>
-        <!-- Dropzone JS -->
+       
         <script src="assets/js/dropzone.min.js"></script>
-        <!-- Sticky Sidebar JS -->
+       
         <script src="assets/js/sticky-sidebar.min.js"></script>
-        <!-- TweenMax JS -->
+        
         <script src="assets/js/tweenMax.min.js"></script>
-        <!-- Owl Carousel JS -->
+       
         <script src="assets/js/owl.carousel.min.js"></script>
-        <!-- Wow Min JS -->
+        
         <script src="assets/js/wow.min.js"></script>
-        <!--=== ajaxChimp Min JS ===-->
+        
         <script src="assets/js/jquery.ajaxchimp.min.js"></script>
-        <!-- Form Validator Min JS -->
+        
         <script src="assets/js/form-validator.min.js"></script>
-        <!-- Contact Form JS -->
+        
         <script src="assets/js/contact-form-script.js"></script>
-        <!--=== Custom JS ===-->
+        
         <script src="assets/js/custom.js"></script>
 
 <script>
-    // Event listener for when the file is selected
+    
     document.getElementById("uploadProfile").addEventListener("change", function(event) {
         const file = event.target.files[0];
         
-        // Check if the file is an image
         if (file && file.type.startsWith("image/")) {
             const reader = new FileReader();
 
             reader.onload = function(e) {
-                // Set the image preview inside the circle
+                
                 const profilePreview = document.getElementById("profilePreview");
-                profilePreview.src = e.target.result;  // Set the preview image source
+                profilePreview.src = e.target.result;  
 
-                // Show the file name
                 document.getElementById("profileFileName").textContent = file.name;
             };
 
-            reader.readAsDataURL(file);  // Read the file as a data URL for the image preview
+            reader.readAsDataURL(file);  
         } else {
-            // If the file is not an image, reset the circle to default (user logo)
-            document.getElementById("profilePreview").src = "assets/images/user-img/user.png";  // Default logo
+            /
+            document.getElementById("profilePreview").src = "assets/images/user-img/user.png"; 
             document.getElementById("profileFileName").textContent = "Please select an image.";
         }
     });
     window.onload = function() {
             var messageElement = document.getElementById('floatingMessage');
             if (messageElement) {
-                // Show the message for 5 seconds
-                messageElement.style.display = 'block';
                 
-                // Hide the message after 5 seconds
+                messageElement.style.display = 'block';
+             
                 setTimeout(function() {
                     messageElement.style.display = 'none';
                 }, 3000);
             }
         };
-        function updateResumeName(input) {
-        const currentResumeName = document.getElementById('currentResumeName');
-        if (input.files && input.files[0]) {
-            currentResumeName.textContent = "Selected Resume: " + input.files[0].name;
-        }
-    }
-       
-</script>
-
-
         
-    </body>
-
-<!-- Mirrored from templates.hibootstrap.com/zoben/default/candidates-dashboard-my-profile.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 06 Nov 2024 10:02:58 GMT -->
+        function updateResumeName(inputElement) {
+    var fileName = inputElement.files[0].name;
+    document.getElementById('currentResumeName').innerHTML = 'New Resume: ' + fileName;
+}    
+</script>
+</body>
 </html>
